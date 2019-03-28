@@ -1,0 +1,2 @@
+IDEmprestimo,IDLivro,CPF,InicioEmprestimo,DataMaximaEntrega,DataDevolucao,Renovacoes
+1,1,12345678-09,18/02/2019,25/02/2019,23/02/2019,0
