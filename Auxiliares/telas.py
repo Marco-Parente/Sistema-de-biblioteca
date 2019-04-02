@@ -1,6 +1,3 @@
-#coding: utf-8
-
-import sys
 import os
 
 
@@ -12,33 +9,76 @@ def menuPrincipal():
     print("2. Sistema de empréstimos.")
     print("3. Sistema de livros.")
     print("0. Encerrar sistema.")
-    choice = input(" >> ")
-    execMenu(choice)
+    choice = int(input('>> '))
+    execMenuPrincipalChoice(choice)
 
 
-def menuLivros():
-    os.system('clear')
-    print("- Livros -")
-    print("Escolha o que deseja fazer:")
-    print("1. Cadastrar novo livro.")
-    print("2. Listar livros emprestados por um usuario em determinado tempo.")
-    print("3. Buscar livro.")
-    print("0. Voltar.")
-    subChoice = input(" >> ")
-    execSubMenu(subChoice)
+def execMenuPrincipalChoice(choice):
+    while True:
+        if choice == 1:
+            menuUsuarios()
+        elif choice == 2:
+            menuEmprestimos()
+        elif choice == 3:
+            menuLivros()
+        elif choice == 0:
+            exit()
+        else:
+            input('Opção inválida, aperte enter e digite novamente... ')
+            break
 
 
-def menuEmprestimos():
-    os.system('clear')
-    print("- Emprestimos -")
-    print("Escolha o que deseja fazer:")
-    print("1. Iniciar empréstimo.")
-    print("2. Renovar emprestimo.")
-    print("3. Encerrar empréstimo.")
-    print("4. Listar livros emprestados por um usuario em determinado tempo.")
-    print("0. Voltar.")
-    subChoice = input(" >> ")
-    execSubMenu(subChoice)
+def execMenuUsuario(choice):
+    while True:
+        if choice == 1:
+            pass
+        elif choice == 2:
+            pass
+        elif choice == 3:
+            pass
+        elif choice == 4:
+            pass
+        elif choice == 0:
+            menuPrincipal()
+        else:
+            input('Opção inválida, aperte enter e digite novamente... ')
+            break
+
+
+def execMenuEmprestimos(choice):
+    while True:
+        if choice == 1:
+            pass
+        elif choice == 2:
+            pass
+        elif choice == 3:
+            pass
+        elif choice == 4:
+            pass
+        elif choice == 0:
+            menuPrincipal()
+        else:
+            input('Opção inválida, aperte enter e digite novamente... ')
+            break
+
+
+def execMenuLivro(choice):
+    while True:
+        if choice == 1:
+            print("Teste1")
+            input('Aperte qlqr tecla continuar... ')
+            menuLivros()
+        elif choice == 2:
+            pass
+        elif choice == 3:
+            pass
+        elif choice == 4:
+            pass
+        elif choice == 0:
+            menuPrincipal()
+        else:
+            input('Opção inválida, aperte enter e digite novamente... ')
+            break
 
 
 def menuUsuarios():
@@ -50,48 +90,35 @@ def menuUsuarios():
     print("3. Listar livros emprestados por um usuario em determinado tempo.")
     print("4. Buscar usuário")
     print("0. Voltar.")
-    subChoice = input(" >> ")
-    execSubMenu(subChoice)
+    subChoice = int(input(" >> "))
+    execMenuUsuario(subChoice)
 
 
-def desligarSistema():
+def menuLivros():
     os.system('clear')
-    print('Obrigado por utilizar o nosso sistema! :}')
+    print("- Livros -")
+    print("Escolha o que deseja fazer:")
+    print("1. Cadastrar novo livro.")
+    print("2. Listar livros emprestados por um usuario em determinado tempo.")
+    print("3. Buscar livro.")
+    print("0. Voltar.")
+    subChoice = int(input(" >> "))
+    execMenuLivro(subChoice)
 
 
-acoesPrincipais = {
-    '1': {
-        'iniciar': menuUsuarios,
-        '0': menuPrincipal
-    },
-    '2': {
-        'iniciar': menuEmprestimos,
-        '0': menuPrincipal
-    },
-    '3': {
-        'iniciar': menuLivros,
-        '0': menuPrincipal
-    },
-    '0': {
-        'iniciar': desligarSistema
-    }
-}
+def menuEmprestimos():
+    os.system('clear')
+    print("- Emprestimos -")
+    print("Escolha o que deseja fazer:")
+    print("1. Iniciar empréstimo.")
+    print("2. Renovar emprestimo.")
+    print("3. Encerrar empréstimo.")
+    print("4. Listar livros emprestados por um usuario em determinado tempo.")
+    print("0. Voltar.")
+    subChoice = int(input(" >> "))
+    execMenuEmprestimos(subChoice)
 
 
-def execMenu(choice):
-    try:
-        acoesPrincipais[choice]['iniciar']()
-    except KeyError:
-        print("Opção inválida, tente denovo.")
-
-
-def execSubMenu(choice):
-    try:
-        acoesPrincipais[choice]['iniciar']()
-    except KeyError:
-        print("Opção inválida, tente denovo.")
-        subChoice = input(" >> ")
-        execSubMenu(subChoice)
-
-
-menuPrincipal()
+if __name__ == '__main__':
+    while True:
+        menuPrincipal()
