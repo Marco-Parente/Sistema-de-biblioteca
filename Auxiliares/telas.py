@@ -1,4 +1,5 @@
 import os
+from .livros import *
 
 
 def menuPrincipal():
@@ -22,6 +23,8 @@ def execMenuPrincipalChoice(choice):
         elif choice == 3:
             menuLivros()
         elif choice == 0:
+            os.system("clear")
+            print("Obrigado por utilizar o nosso sistema :}")
             exit()
         else:
             input('Opção inválida, aperte enter e digite novamente... ')
@@ -65,8 +68,8 @@ def execMenuEmprestimos(choice):
 def execMenuLivro(choice):
     while True:
         if choice == 1:
-            print("Teste1")
-            input('Aperte qlqr tecla continuar... ')
+            cadastrarNovoLivro()
+            input('Aperte enter para continuar... ')
             menuLivros()
         elif choice == 2:
             pass
