@@ -4,7 +4,8 @@ from .livros import *
 
 def menuPrincipal():
     os.system('clear')
-    print("\nBem vindo ao sistema bibliotecário")
+    print("Bem vindo ao sistema bibliotecário")
+    print("")
     print("Escolha o que deseja fazer:")
     print("1. Sistema de usuários.")
     print("2. Sistema de empréstimos.")
@@ -74,9 +75,9 @@ def execMenuLivro(choice):
         elif choice == 2:
             pass
         elif choice == 3:
-            pass
-        elif choice == 4:
-            pass
+            buscarLivro()
+            input('Aperte enter para continuar... ')
+            menuLivros()
         elif choice == 0:
             menuPrincipal()
         else:
@@ -87,6 +88,7 @@ def execMenuLivro(choice):
 def menuUsuarios():
     os.system('clear')
     print("- Usuários -")
+    print("")
     print("Escolha o que deseja fazer:")
     print("1. Cadastrar usuário.")
     print("2. Atualizar usuário.")
@@ -100,6 +102,7 @@ def menuUsuarios():
 def menuLivros():
     os.system('clear')
     print("- Livros -")
+    print("")
     print("Escolha o que deseja fazer:")
     print("1. Cadastrar novo livro.")
     print("2. Listar livros emprestados por um usuario em determinado tempo.")
@@ -112,6 +115,7 @@ def menuLivros():
 def menuEmprestimos():
     os.system('clear')
     print("- Emprestimos -")
+    print("")
     print("Escolha o que deseja fazer:")
     print("1. Iniciar empréstimo.")
     print("2. Renovar emprestimo.")
