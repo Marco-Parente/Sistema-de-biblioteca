@@ -1,5 +1,6 @@
 import os
 from .livros import *
+from .emprestimos import *
 
 
 def menuPrincipal():
@@ -52,7 +53,9 @@ def execMenuUsuario(choice):
 def execMenuEmprestimos(choice):
     while True:
         if choice == 1:
-            pass
+            iniciarEmprestimo()
+            input('Aperte enter para continuar... ')
+            menuLivros()
         elif choice == 2:
             pass
         elif choice == 3:
