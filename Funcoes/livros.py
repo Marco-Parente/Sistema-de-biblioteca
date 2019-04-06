@@ -2,6 +2,8 @@
 import os
 import csv
 
+# @fazerdps: arrumar os campos usando dict, verificar a insercao correta de dados, fechar arquivos
+
 
 def selecionarArea():
     print("Digite a area do livro: ")

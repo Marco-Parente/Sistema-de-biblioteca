@@ -1,3 +1,3 @@
-from Auxiliares.telas import *
+from Funcoes.telas import *
 
 menuPrincipal()

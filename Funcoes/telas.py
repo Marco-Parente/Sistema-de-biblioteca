@@ -55,9 +55,11 @@ def execMenuEmprestimos(choice):
         if choice == 1:
             iniciarEmprestimo()
             input('Aperte enter para continuar... ')
-            menuLivros()
+            menuEmprestimos()
         elif choice == 2:
-            pass
+            renovarEmprestimo()
+            input('Aperte enter para continuar... ')
+            menuEmprestimos()
         elif choice == 3:
             pass
         elif choice == 4:
