@@ -65,11 +65,11 @@ def renovarEmprestimo():
     print("Emprestimos cuja data maxima foi extrapolada não são passíveis de renovação.")
     print("")
     print("As informações da tabela abaixo estão apresentadas da seguinte forma:")
-    print("ID EMPRESTIMO | ESTADO | CPF | DATA MAXIMA DE ENTREGA ATUAL")
+    print("ID EMPRESTIMO | ESTADO DO EMPRESTIMO | CPF | DATA MAXIMA DE ENTREGA ATUAL")
     print("")
-    # print("       [0]       |    *!DATA      |       [2]     |    [4]    ")
 
     empRenovaveis = []
+    empTemporario = []
 
     arquivoExiste = os.path.isfile("emprestimos.csv")
     if not arquivoExiste:
@@ -93,35 +93,39 @@ def renovarEmprestimo():
         arquivo.close()
 
         print("")
-        print("Lista dos emprestimos que podem ser renovados:")
-        for linhas in empRenovaveis:
-            print(linhas[0], "|", linhas[2], "|", linhas[4])
-        print("")
-        print("Digite o ID do emprestimo que voce deseja renovar:")
-        idEmprestimo = input(" >> ")
 
-        # for emprestimo in empRenovaveis:
-        #     print(emprestimo)
-        #     if idEmprestimo in emprestimo[0]:
-        with open("emprestimos.csv", "r") as arquivo, open("emprestimos.csv", "w") as arquivoTemporario:
+        if not empRenovaveis:
+            print("Nao há emprestimos para serem renovados")
+            return
+        else:
+            print("Lista dos emprestimos que podem ser renovados:")
+            for linhas in empRenovaveis:
+                print(linhas[0], "|", linhas[2], "|", linhas[4])
+            print("")
+            idEmprestimo = -1
+            while(idEmprestimo not in empRenovaveis[0]):
+                print("Digite o ID do emprestimo que voce deseja renovar:")
+                idEmprestimo = input(" >> ")
+
+        with open("emprestimos.csv", "r", newline='') as arquivo:
             leitor = csv.DictReader(arquivo, fieldnames=campos)
-            escritor = csv.DictWriter(
-                arquivoTemporario, fieldnames=campos)
+            next(arquivo)
             for linha in leitor:
-                if linha[0] == idEmprestimo:
+                if linha['ID'] == idEmprestimo:
                     # if linhacpf = aluno ou prof
+                    # adicionar renovacao
                     dataNova = datetime.datetime.strptime(
-                        linha[4], "%d/%m/%Y") + datetime.timedelta(7)
-                    linha[4] = dataNova.strftime("%d/%m/%Y")
-                    print("Nova data de entrega:", linha[4])
-                    escritor.writerow(linha)
+                        linha['Maximo'], "%d/%m/%Y") + datetime.timedelta(7)
+                    linha['Maximo'] = dataNova.strftime("%d/%m/%Y")
+                    print("Nova data de entrega:", linha['Maximo'])
+                empTemporario.append(linha)
+            arquivo.close()
 
-                escritor.writerow(linha)
+        with open("emprestimos.csv", "w", newline='') as arquivoTemporario:
+            escritor = csv.DictWriter(arquivoTemporario, fieldnames=campos)
+            escritor.writeheader()
+            escritor.writerows(empTemporario)
+            arquivoTemporario.close()
 
-        arquivo.close()
-        arquivoTemporario()
-        shutil.move(arquivoTemporario.name, arquivo)
+        shutil.move(arquivoTemporario.name, arquivo.name)
         print("Emprestimo renovado com sucesso!")
-        return
-
-    print("O empréstimo informado nao está na lista ou nao pode ser renovado.")
