@@ -1,6 +1,7 @@
 
 import os
 import csv
+from .Auxiliares import *
 
 # @fazerdps: arrumar os campos usando dict, verificar a insercao correta de dados, fechar arquivos
 
@@ -69,9 +70,6 @@ def cadastrarNovoLivro():
 
     Livro.update({"Emprestado": False})
 
-    campos = ['ID', 'Titulo', 'Autor', 'Area', 'Paginas', 'Ano',
-              'Palavra 1', 'Palavra 2', 'Palavra 3', 'Emprestado']
-
     arquivoExiste = os.path.isfile("livros.csv")
 
     if arquivoExiste:
@@ -81,14 +79,16 @@ def cadastrarNovoLivro():
             Livro.update({"ID": quantidadeLivros})
     else:
         Livro.update({"ID": 1})
+    arquivo.close()
 
     with open("livros.csv", "a", newline="") as arquivo:
-        escritor = csv.DictWriter(arquivo, fieldnames=campos)
+        escritor = csv.DictWriter(arquivo, fieldnames=camposLivros())
 
         if not arquivoExiste:
             escritor.writeheader()
 
         escritor.writerow(Livro)
+    arquivo.close()
 
 
 def buscarLivro():
@@ -130,6 +130,7 @@ def buscaLivroPalavraChave():
                 if linhas[x] == palavra:
                     encontrou = True
                     livrosEncontrados.append(linhas)
+    arquivo.close()
 
     if not encontrou:
         print("Nenhum livro foi encontrado")
@@ -157,6 +158,7 @@ def buscaLivroTitulo():
             if linhas[1].find(titulo) >= 0:
                 encontrou = True
                 livrosEncontrados.append(linhas)
+    arquivo.close()
 
     if not encontrou:
         print("Nenhum livro foi encontrado")
@@ -184,6 +186,7 @@ def buscaLivroAutor():
             if linhas[2].find(autor) >= 0:
                 encontrou = True
                 livrosEncontrados.append(linhas)
+    arquivo.close()
 
     if not encontrou:
         print("Nenhum livro foi encontrado")
@@ -210,6 +213,7 @@ def buscaLivroArea():
             if linhas[3] == area:
                 encontrou = True
                 livrosEncontrados.append(linhas)
+    arquivo.close()
 
     if not encontrou:
         print("Nenhum livro foi encontrado")

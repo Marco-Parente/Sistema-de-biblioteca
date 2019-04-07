@@ -2,7 +2,7 @@ import os
 import csv
 import datetime
 import shutil
-from tempfile import NamedTemporaryFile
+from .Auxiliares import *
 
 
 def isIndicenaLista(lst, indice, valor):
@@ -62,12 +62,6 @@ def iniciarEmprestimo():
     print("A data maxima de entrega é: ",
           dataMaximaEntrega.strftime("%d/%m/%Y"))
 
-    campos = ['ID', 'ID Livro', 'CPF', 'Inicio',
-              'Maximo', 'Devolução', 'Qnt Renovação']
-
-    camposLivros = ['ID', 'Titulo', 'Autor', 'Area', 'Paginas', 'Ano',
-                    'Palavra 1', 'Palavra 2', 'Palavra 3', 'Emprestado']
-
     Emprestimo = {
         'ID Livro': idLivro,
         'CPF': cpf,
@@ -88,7 +82,7 @@ def iniciarEmprestimo():
         Emprestimo.update({"ID": 1})
 
     with open("emprestimos.csv", "a", newline="") as arquivo:
-        escritor = csv.DictWriter(arquivo, fieldnames=campos)
+        escritor = csv.DictWriter(arquivo, fieldnames=camposEmprestimos())
 
         if not arquivoExiste:
             escritor.writeheader()
@@ -103,7 +97,7 @@ def iniciarEmprestimo():
             livro = livroSelecionado
 
     with open("livros.csv", "w", newline='') as arquivo:
-        escritor = csv.DictWriter(arquivo, fieldnames=camposLivros)
+        escritor = csv.DictWriter(arquivo, fieldnames=camposLivros())
         escritor.writeheader()
         escritor.writerows(listaLivros)
     arquivo.close()
@@ -113,9 +107,6 @@ def renovarEmprestimo():
     os.system("clear")
     print(" - Renovar empréstimo - ")
     print("")
-
-    campos = ['ID', 'ID Livro', 'CPF', 'Inicio',
-              'Maximo', 'Devolução', 'Qnt Renovação']
 
     print("Emprestimos cuja data maxima foi extrapolada não são passíveis de renovação.")
     print("")
@@ -166,7 +157,7 @@ def renovarEmprestimo():
                 idEmprestimo = input(" >> ")
 
         with open("emprestimos.csv", "r", newline='') as arquivo:
-            leitor = csv.DictReader(arquivo, fieldnames=campos)
+            leitor = csv.DictReader(arquivo, fieldnames=camposEmprestimos())
             next(arquivo)
             for emprestimo in leitor:
                 if emprestimo['ID'] == idEmprestimo:
@@ -181,7 +172,8 @@ def renovarEmprestimo():
             arquivo.close()
 
         with open("emprestimos.csv", "w", newline='') as arquivoTemporario:
-            escritor = csv.DictWriter(arquivoTemporario, fieldnames=campos)
+            escritor = csv.DictWriter(
+                arquivoTemporario, fieldnames=camposEmprestimos())
             escritor.writeheader()
             escritor.writerows(empTemporario)
             arquivoTemporario.close()
@@ -194,9 +186,6 @@ def encerrarEmprestimo():
     os.system("clear")
     print(" - Encerrar empréstimo - ")
     print("")
-
-    campos = ['ID', 'ID Livro', 'CPF', 'Inicio',
-              'Maximo', 'Devolução', 'Qnt Renovação']
 
     empTodos = []
     empAbertos = []
@@ -258,24 +247,22 @@ def encerrarEmprestimo():
         print("O livro foi entregado sem atrasos.")
 
     with open("emprestimos.csv", "w", newline='') as arquivo:
-        escritor = csv.DictWriter(arquivo, fieldnames=campos)
+        escritor = csv.DictWriter(arquivo, fieldnames=camposEmprestimos())
         escritor.writeheader()
         escritor.writerows(empTodos)
     arquivo.close()
 
-    camposLivros = ['ID', 'Titulo', 'Autor', 'Area', 'Paginas', 'Ano',
-                    'Palavra 1', 'Palavra 2', 'Palavra 3', 'Emprestado']
-
-    arquivoLivro = "livros.csv"
-    arquivoTemp = NamedTemporaryFile(mode="w", delete="false")
-
-    with open(arquivoLivro, "r", newline='') as arquivo, arquivoTemp:
-        leitor = csv.DictReader(arquivo, fieldnames=camposLivros)
-        escritor = csv.DictWriter(arquivoTemp, fieldnames=camposLivros)
+    livrosAtualizados = []
+    with open("livros.csv", "r", newline='') as arquivo:
+        leitor = csv.DictReader(arquivo, fieldnames=camposLivros())
+        next(arquivo)
         for livro in leitor:
             if livro['ID'] == emprestimoSelecionado['ID Livro']:
                 livro['Emprestado'] = False
-            escritor.writerow(livro)
+            livrosAtualizados.append(livro)
     arquivo.close()
-    arquivoTemp.close()
-    shutil.move(arquivoTemp.name, arquivoLivro)
+
+    with open("livros.csv", "w", newline='') as arquivo:
+        escritor = csv.DictWriter(arquivo, fieldnames=camposLivros())
+        escritor.writeheader()
+        escritor.writerows(livrosAtualizados)
