@@ -11,7 +11,7 @@ def CadastrarNovoUsuario():
     resposta= input("-> ")
     if resposta.upper() == "Discente":
         Usuario.update({"Tipo": resposta})
-    elif resposta.upper( == "Docente")
+    elif resposta.upper( == "Docente"):
         Usuario.update({"Tipo": resposta})
     else:
         input('Resposta inválida. Pressione qualquer tecla...')
