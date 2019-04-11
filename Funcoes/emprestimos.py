@@ -17,17 +17,17 @@ def iniciarEmprestimo():
     print(" - Iniciar empréstimo - ")
     print("")
 
-    listaLivros = []
+    listaLivros = listarLivros()
     livrosDisponiveis = []
     listaUsuarios = listarUsuarios()
 
-    with open("livros.csv", "r", newline='') as arquivo:
-        leitor = csv.DictReader(arquivo)
-        for linha in leitor:
-            listaLivros.append(linha)
-            if linha['Emprestado'] == 'False':
-                livrosDisponiveis.append(linha)
-    arquivo.close()
+    if not listaLivros:
+        print("Como não há livros cadastrados, não é possível iniciar um empréstimo")
+        return
+
+    for livro in listaLivros:
+        if livro['Emprestado'] == 'False':
+            livrosDisponiveis.append(livro)
 
     if not livrosDisponiveis:
         print("Não há livros disponíveis para empréstimo.")
