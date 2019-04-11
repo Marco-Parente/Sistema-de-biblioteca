@@ -1,6 +1,7 @@
 
 import os
 import csv
+import datetime
 from .Auxiliares import *
 
 # @fazerdps: arrumar os campos usando dict, verificar a insercao correta de dados, fechar arquivos
@@ -221,3 +222,74 @@ def buscaLivroArea():
         print("Os seguintes livros foram encontrados: ")
         for livro in livrosEncontrados:
             print(livro[1])
+
+
+def livrosEmprestadosUsuario():
+    os.system("clear")
+    print(" - Livros emprestados em determinado periodo de tempo - ")
+    print("")
+
+    listaEmprestimos = listarEmprestimos()
+    listaLivros = listarLivros()
+    listaUsuarios = listarUsuarios()
+
+    print("Para começar, digite a data inicial da busca (FORMATO: DD/MM/AAAA):")
+    dia = input("Dia: ")
+    mes = input("Mes: ")
+    ano = input("Ano: ")
+    dataInicial = datetime.datetime.strptime(
+        dia+'/'+mes+'/'+ano, "%d/%m/%Y").date()
+    print("")
+
+    print("Agora, digite a data final da busca (FORMATO: DD/MM/AAAA):")
+    diaFim = input("Dia: ")
+    mesFim = input("Mes: ")
+    anoFim = input("Ano: ")
+    dataFinal = datetime.datetime.strptime(
+        diaFim+'/'+mesFim+'/'+anoFim, "%d/%m/%Y").date()
+    print("")
+
+    emprestimosNaData = []
+    for emprestimo in listaEmprestimos:
+        empDataInicial = datetime.datetime.strptime(
+            emprestimo['Inicio'], "%d/%m/%Y").date()
+        if dataInicial <= empDataInicial:
+            if not emprestimo['Devolução']:
+                emprestimosNaData.append(emprestimo)
+            else:
+                empDataFinal = datetime.datetime.strptime(
+                    emprestimo['Devolução'], "%d/%m/%Y").date()
+                if dataFinal >= empDataFinal:
+                    emprestimosNaData.append(emprestimo)
+
+    listaCPFs = []
+    listaIDLivros = []
+    for emprestimos in emprestimosNaData:
+        listaCPFs.append(emprestimo['CPF'])
+        listaIDLivros.append(emprestimo['ID Livro'])
+
+    infoLivros = []
+    for livro in listaLivros:
+        if any(idNaData == livro['ID'] for idNaData in listaIDLivros):
+            infoLivros.append(livro)
+
+    infoUsuarios = []
+    for usuario in listaUsuarios:
+        if any(cpfNaData == usuario['CPF'] for cpfNaData in listaCPFs):
+            infoUsuarios.append(usuario)
+
+    print("Nesse intervalo de tempo, foram encontrados os seguintes resultados:")
+    for emprestimo in emprestimosNaData:
+        livroS = next(
+            livro for livro in infoLivros if livro['ID'] == emprestimo['ID Livro'])
+        usuarioS = next(
+            usuario for usuario in infoUsuarios if usuario['CPF'] == emprestimo['CPF'])
+        print("-------")
+        print("ID do emprestimo:", emprestimo['ID'])
+        print("Livro:", livroS['Titulo'])
+        print("CPF:",usuarioS['CPF'],"| Nome:",usuarioS['Nome'])
+        if not emprestimo['Devolução']:
+            print('O livro ainda nao foi devolvido.')
+        else:
+            print('Devolvido em:',emprestimo['Devolução'])
+        

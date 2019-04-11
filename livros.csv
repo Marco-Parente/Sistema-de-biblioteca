@@ -1,9 +1,0 @@
-ID,Titulo,Autor,Area,Paginas,Ano,Palavra 1,Palavra 2,Palavra 3,Emprestado
-1,titulo1,autor,Ciencias da saude,1,1,1p1,1p2,1p3,False
-2,titulo2,autor2,Ciencias humanas,2,2,2p1,2p2,2p3,False
-3,titulo3,autor3,Ciencias sociais aplicadas,3,3,3p1,3p2,1p1,False
-4,Polyanna,arthur,Ciencias humanas,500,2009,Amor,Romance,Terror,False
-5,Titulo5,autor5,Linguistica,5,5,5,6,7,False
-6,teste,teste,Ciencias sociais aplicadas,3,3,tea,tes,tesa,False
-7,ViniciusElouco,Vinicius,Multidisciplinar,3,1999,Pokemones,Vinicius,Discovery,False
-8,Teste8,marco,Ciencias sociais aplicadas,124,2019,Maquinho,Boy,Gatinho,False

@@ -11,9 +11,6 @@ def isIndicenaLista(lst, indice, valor):
             return True
     return False
 
-# def iIL(lst, indice, valor):
-#     return if any(  )
-
 
 def iniciarEmprestimo():
     os.system("clear")
@@ -22,6 +19,7 @@ def iniciarEmprestimo():
 
     listaLivros = []
     livrosDisponiveis = []
+    listaUsuarios = listarUsuarios()
 
     with open("livros.csv", "r", newline='') as arquivo:
         leitor = csv.DictReader(arquivo)
@@ -33,6 +31,11 @@ def iniciarEmprestimo():
 
     if not livrosDisponiveis:
         print("Não há livros disponíveis para empréstimo.")
+        return
+
+    if not listaUsuarios:
+        print(
+            "Ainda não há usuarios cadastrados, logo, nao e possivel iniciar um emprestimo.")
         return
 
     print("Os seguintes livros estão disponíveis para empréstimo:")
@@ -52,13 +55,24 @@ def iniciarEmprestimo():
         livro for livro in livrosDisponiveis if livro['ID'] == idLivro)
 
     # TODO Aqui devemos saber pelo cpf se o usuario existe ou nao
+
     print("Digite o CPF do usuario que esta solicitando o emprestimo:")
     cpf = input(" >> ")
+
+    if not any(usuario['CPF'] == cpf for usuario in listaUsuarios):
+        print("Usuário não encontrado. Por favor, inicie o processo novamente.")
+        return
+
+    usuarioS = next(
+        usuario for usuario in listaUsuarios if usuario['CPF'] == cpf)
 
     dataInicio = datetime.datetime.now().date()
     print("A data atual é: ", dataInicio.strftime("%d/%m/%Y"))
 
-    dataMaximaEntrega = dataInicio + datetime.timedelta(days=7)
+    if usuarioS['Tipo'].upper() == 'DOCENTE':
+        dataMaximaEntrega = dataInicio + datetime.timedelta(days=15)
+    else:
+        dataMaximaEntrega = dataInicio + datetime.timedelta(days=7)
     print("A data maxima de entrega é: ",
           dataMaximaEntrega.strftime("%d/%m/%Y"))
 
@@ -116,6 +130,7 @@ def renovarEmprestimo():
 
     empRenovaveis = []
     empTemporario = []
+    listaUsuarios = listarUsuarios()
 
     arquivoExiste = os.path.isfile("emprestimos.csv")
     if not arquivoExiste:
@@ -161,9 +176,14 @@ def renovarEmprestimo():
             next(arquivo)
             for emprestimo in leitor:
                 if emprestimo['ID'] == idEmprestimo:
-                    # if emprestimocpf = aluno ou prof
-                    dataNova = datetime.datetime.strptime(
-                        emprestimo['Maximo'], "%d/%m/%Y") + datetime.timedelta(7)
+                    usuarioS = next(
+                        usuario for usuario in listaUsuarios if usuario['CPF'] == emprestimo['CPF'])
+                    if usuarioS['Tipo'].upper() == 'DOCENTE':
+                        dataNova = datetime.datetime.strptime(
+                            emprestimo['Maximo'], "%d/%m/%Y") + datetime.timedelta(15)
+                    else:
+                        dataNova = datetime.datetime.strptime(
+                            emprestimo['Maximo'], "%d/%m/%Y") + datetime.timedelta(7)
                     emprestimo['Maximo'] = dataNova.strftime("%d/%m/%Y")
                     emprestimo['Qnt Renovação'] = int(
                         emprestimo['Qnt Renovação']) + 1

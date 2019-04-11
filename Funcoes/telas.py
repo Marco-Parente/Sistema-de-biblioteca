@@ -1,6 +1,7 @@
 import os
 from .livros import *
 from .emprestimos import *
+from .usuarios import *
 
 
 def menuPrincipal():
@@ -36,13 +37,17 @@ def execMenuPrincipalChoice(choice):
 def execMenuUsuario(choice):
     while True:
         if choice == 1:
-            pass
+            CadastrarNovoUsuario()
+            input('Aperte enter para continuar... ')
+            menuUsuarios()
         elif choice == 2:
-            pass
+            AtualizarUsuario()
+            input('Aperte enter para continuar... ')
+            menuUsuarios()
         elif choice == 3:
-            pass
-        elif choice == 4:
-            pass
+            BuscarUsuario()
+            input('Aperte enter para continuar... ')
+            menuUsuarios()
         elif choice == 0:
             menuPrincipal()
         else:
@@ -64,8 +69,6 @@ def execMenuEmprestimos(choice):
             encerrarEmprestimo()
             input('Aperte enter para continuar... ')
             menuEmprestimos()
-        elif choice == 4:
-            pass
         elif choice == 0:
             menuPrincipal()
         else:
@@ -80,7 +83,9 @@ def execMenuLivro(choice):
             input('Aperte enter para continuar... ')
             menuLivros()
         elif choice == 2:
-            pass
+            livrosEmprestadosUsuario()
+            input('Aperte enter para continuar... ')
+            menuLivros()
         elif choice == 3:
             buscarLivro()
             input('Aperte enter para continuar... ')
@@ -99,8 +104,7 @@ def menuUsuarios():
     print("Escolha o que deseja fazer:")
     print("1. Cadastrar usuário.")
     print("2. Atualizar usuário.")
-    print("3. Listar livros emprestados por um usuario em determinado tempo.")
-    print("4. Buscar usuário")
+    print("3. Buscar usuário")
     print("0. Voltar.")
     subChoice = int(input(" >> "))
     execMenuUsuario(subChoice)
@@ -112,7 +116,7 @@ def menuLivros():
     print("")
     print("Escolha o que deseja fazer:")
     print("1. Cadastrar novo livro.")
-    print("2. Listar livros emprestados por um usuario em determinado tempo.")
+    print("2. Listar livros que foram ou estão emprestados a um determinado usuario em determinado periodo de tempo.")
     print("3. Buscar livro.")
     print("0. Voltar.")
     subChoice = int(input(" >> "))
@@ -127,7 +131,6 @@ def menuEmprestimos():
     print("1. Iniciar empréstimo.")
     print("2. Renovar emprestimo.")
     print("3. Encerrar empréstimo.")
-    print("4. Listar livros emprestados por um usuario em determinado tempo.")
     print("0. Voltar.")
     subChoice = int(input(" >> "))
     execMenuEmprestimos(subChoice)
