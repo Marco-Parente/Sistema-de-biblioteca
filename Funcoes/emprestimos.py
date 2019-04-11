@@ -54,8 +54,6 @@ def iniciarEmprestimo():
     livroSelecionado = next(
         livro for livro in livrosDisponiveis if livro['ID'] == idLivro)
 
-    # TODO Aqui devemos saber pelo cpf se o usuario existe ou nao
-
     print("Digite o CPF do usuario que esta solicitando o emprestimo:")
     cpf = input(" >> ")
 
@@ -65,6 +63,10 @@ def iniciarEmprestimo():
 
     usuarioS = next(
         usuario for usuario in listaUsuarios if usuario['CPF'] == cpf)
+
+    if int(usuarioS['Qnt Livros emprestados']) >= 3:
+        print("Quantidade maxima permitida ja atingida, este usuario nao pode mais emprestar livros.")
+        return
 
     dataInicio = datetime.datetime.now().date()
     print("A data atual é: ", dataInicio.strftime("%d/%m/%Y"))
@@ -105,6 +107,8 @@ def iniciarEmprestimo():
             print("Empréstimo realizado com sucesso.")
 
     livroSelecionado['Emprestado'] = True
+    usuarioS['Qnt Livros emprestados'] = 1 + \
+        int(usuarioS['Qnt Livros emprestados'])
 
     for livro in listaLivros:
         if livro['ID'] == livroSelecionado['ID']:
@@ -114,6 +118,12 @@ def iniciarEmprestimo():
         escritor = csv.DictWriter(arquivo, fieldnames=camposLivros())
         escritor.writeheader()
         escritor.writerows(listaLivros)
+    arquivo.close()
+
+    with open("usuarios.csv", "w", newline='') as arquivo:
+        escritor = csv.DictWriter(arquivo, fieldnames=camposUsuarios())
+        escritor.writeheader()
+        escritor.writerows(listaUsuarios)
     arquivo.close()
 
 
@@ -209,6 +219,7 @@ def encerrarEmprestimo():
 
     empTodos = []
     empAbertos = []
+    listaUsuarios = listarUsuarios()
 
     arquivoExiste = os.path.isfile("emprestimos.csv")
     if not arquivoExiste:
@@ -241,6 +252,9 @@ def encerrarEmprestimo():
 
     emprestimoSelecionado = next(
         emprestimo for emprestimo in empAbertos if emprestimo['ID'] == escolha)
+
+    usuarioS = next(
+        usuario for usuario in listaUsuarios if usuario['CPF'] == emprestimoSelecionado['CPF'])
 
     devolucao = datetime.datetime.now()
     emprestimoSelecionado['Devolução'] = devolucao.strftime("%d/%m/%Y")
@@ -286,3 +300,12 @@ def encerrarEmprestimo():
         escritor = csv.DictWriter(arquivo, fieldnames=camposLivros())
         escritor.writeheader()
         escritor.writerows(livrosAtualizados)
+
+    usuarioS['Qnt Livros emprestados'] = int(
+        usuarioS['Qnt Livros emprestados']) - 1
+
+    with open("usuarios.csv", "w", newline='') as arquivo:
+        escritor = csv.DictWriter(arquivo, fieldnames=camposUsuarios())
+        escritor.writeheader()
+        escritor.writerows(listaUsuarios)
+    arquivo.close()
