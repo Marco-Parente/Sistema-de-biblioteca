@@ -2,6 +2,7 @@
 # envitando a repetição.
 # Alem disso, a funcao listar livros emprestados por usuario se encontra aqui, pois e uma funcao comum à todas as outras
 
+import os
 import csv
 
 
@@ -17,43 +18,33 @@ def camposUsuarios():
     return ['CPF', 'Nome', 'Tipo', 'Qnt Livros emprestados', 'Data p novo emprestimo']
 
 
-def listarUsuarios():
-    listaUsuarios = []
-    with open("usuarios.csv", "r", newline='') as arquivo:
+def listarArquivo(nomeArquivo):
+    lista = []
+
+    arquivoExiste = os.path.isfile(nomeArquivo)
+
+    if not arquivoExiste:
+        return print("O arquivo ", nomeArquivo, " não existe, por isso, essa função nao pode ser utilizada.")
+
+    with open(nomeArquivo, "r", newline='') as arquivo:
         leitor = csv.DictReader(arquivo)
         for linha in leitor:
-            listaUsuarios.append(linha)
+            lista.append(linha)
     arquivo.close()
 
-    if not listaUsuarios:
+    if not lista:
         return 0
 
-    return listaUsuarios
+    return lista
+
+
+def listarUsuarios():
+    return listarArquivo('usuarios.csv')
 
 
 def listarEmprestimos():
-    listaEmprestimos = []
-    with open("emprestimos.csv", "r", newline='') as arquivo:
-        leitor = csv.DictReader(arquivo)
-        for linha in leitor:
-            listaEmprestimos.append(linha)
-    arquivo.close()
-
-    if not listaEmprestimos:
-        return 0
-
-    return listaEmprestimos
+    return listarArquivo('emprestimos.csv')
 
 
 def listarLivros():
-    listaLivros = []
-    with open("livros.csv", "r", newline='') as arquivo:
-        leitor = csv.DictReader(arquivo)
-        for linha in leitor:
-            listaLivros.append(linha)
-    arquivo.close()
-
-    if not listaLivros:
-        return 0
-
-    return listaLivros
+    return listarArquivo('livros.csv')

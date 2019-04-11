@@ -78,9 +78,9 @@ def cadastrarNovoLivro():
             leitor = csv.reader(arquivo)
             quantidadeLivros = len(list(leitor))
             Livro.update({"ID": quantidadeLivros})
+        arquivo.close()
     else:
         Livro.update({"ID": 1})
-    arquivo.close()
 
     with open("livros.csv", "a", newline="") as arquivo:
         escritor = csv.DictWriter(arquivo, fieldnames=camposLivros())
@@ -287,9 +287,8 @@ def livrosEmprestadosUsuario():
         print("-------")
         print("ID do emprestimo:", emprestimo['ID'])
         print("Livro:", livroS['Titulo'])
-        print("CPF:",usuarioS['CPF'],"| Nome:",usuarioS['Nome'])
+        print("CPF:", usuarioS['CPF'], "| Nome:", usuarioS['Nome'])
         if not emprestimo['Devolução']:
             print('O livro ainda nao foi devolvido.')
         else:
-            print('Devolvido em:',emprestimo['Devolução'])
-        
+            print('Devolvido em:', emprestimo['Devolução'])
