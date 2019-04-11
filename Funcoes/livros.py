@@ -233,6 +233,13 @@ def livrosEmprestadosUsuario():
     listaLivros = listarLivros()
     listaUsuarios = listarUsuarios()
 
+    if not listaEmprestimos:
+        return
+    if not listaLivros:
+        return
+    if not listaUsuarios:
+        return
+
     print("Para começar, digite a data inicial da busca (FORMATO: DD/MM/AAAA):")
     dia = input("Dia: ")
     mes = input("Mes: ")
